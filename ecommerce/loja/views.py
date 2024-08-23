@@ -14,16 +14,20 @@ def loja(request, nome_categoria=None):
     context = {"produtos":produtos}
     return render(request, 'loja.html', context)
 
-def ver_produto(request, id_produto):
+def ver_produto(request, id_produto, id_cor=None):
+    tem_estoque = False
+    cores = {}
+    tamanhos = {}
     produto = Produto.objects.get(id=id_produto)
     itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0)
     if len(itens_estoque) > 0:
-        possui_estoque = True
+        tem_estoque = True
         cores = {item.cor for item in itens_estoque}
-    else:
-        possui_estoque = False
-        cores = []
-    context = {"produto": produto, "itens_estoque": itens_estoque, "possui_estoque": possui_estoque, "cores": cores}
+        if id_cor:
+            itens_estoque = ItemEstoque.objects.filter(produto=produto, quantidade__gt=0, cor__id=id_cor)
+            tamanhos = {item.tamanho for item in itens_estoque}
+    context = {"produto": produto, "itens_estoque": itens_estoque, "tem_estoque": tem_estoque, "cores": cores, "tamanhos": tamanhos}
+    print(tamanhos)
     return render(request, 'ver_produto.html', context)
 
 def carrinho(request):

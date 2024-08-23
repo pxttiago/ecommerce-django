@@ -68,9 +68,6 @@ class Endereco(models.Model):
     estado = models.CharField(max_length=200, null=True, blank=True)
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.SET_NULL)
 
-    def __str__(self):
-        return str(self.nome)
-
 
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.SET_NULL)
@@ -79,17 +76,11 @@ class Pedido(models.Model):
     endereco = models.ForeignKey(Endereco, null=True, blank=True, on_delete=models.SET_NULL)
     data_finalizacao = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self):
-        return str(self.nome)
-
 
 class ItensPedido(models.Model):
     pedido = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.SET_NULL)
     item_estoque = models.ForeignKey(ItemEstoque, null=True, blank=True, on_delete=models.SET_NULL)
     quantidade = models.IntegerField(default=0)
-
-    def __str__(self):
-        return str(self.nome)
 
 
 class Banner(models.Model):
