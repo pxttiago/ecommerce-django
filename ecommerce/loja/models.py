@@ -12,7 +12,7 @@ class Cliente(models.Model):
     usuario = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.nome)
+        return str(self.email)
 
 
 class Categoria(models.Model):
@@ -76,11 +76,17 @@ class Pedido(models.Model):
     endereco = models.ForeignKey(Endereco, null=True, blank=True, on_delete=models.SET_NULL)
     data_finalizacao = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"Cliente: {self.cliente.email} - id_pedido: {self.id} - Finalizado: {self.finalizado}"
+
 
 class ItensPedido(models.Model):
     pedido = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.SET_NULL)
     item_estoque = models.ForeignKey(ItemEstoque, null=True, blank=True, on_delete=models.SET_NULL)
     quantidade = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"id_pedido: {self.pedido.id} - Produto: {self.item_estoque.produto.nome}, {self.item_estoque.cor.nome}, {self.item_estoque.tamanho}"
 
 
 class Banner(models.Model):
