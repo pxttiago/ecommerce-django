@@ -47,7 +47,12 @@ def adicionar_carrinho(request, id_produto):
         return redirect('loja')
 
 def carrinho(request):
-    return render(request, 'carrinho.html')
+    if request.user.is_authenticated:
+        cliente = request.user.cliente
+    pedido, criado = Pedido.objects.get_or_create(cliente=cliente, finalizado=False)
+    itens_pedido = ItensPedido.objects.filter(pedido=pedido)
+    context = {"itens_pedido": itens_pedido, "pedido": pedido}
+    return render(request, 'carrinho.html', context)
 
 def checkout(request):
     return render(request, 'checkout.html')
